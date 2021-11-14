@@ -1,5 +1,7 @@
-import PayrollForm from './component/PayrollForm';
-import './component/payrollForm.css';
+import PayrollForm from './component/payroll/PayrollForm';
+import './component/payroll/payrollForm.css';
+import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import HomePage from './component/homePage/HomePage'
 
 function App() {
   return (
@@ -15,7 +17,10 @@ function App() {
         </div>
       </header>
 
-      <PayrollForm />
+      <Routes>
+        <Route path="/form" element={<PayrollForm />} />
+        <Route path="/" element={<HomePage />} />
+      </Routes>
 
     </div>
   );
