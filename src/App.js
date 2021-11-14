@@ -3,21 +3,21 @@ import './component/payrollForm.css';
 
 function App() {
   return (
-    <body>
+    <div>
 
-    <header class="header-content header">
-        <div class="logo-content">
-            <img src="../assets/images/logo.png" alt="" />
-            <div>
-                <span class="emp-text">EMPLOYEE</span><br />
-                <span class="emp-text emp-payroll">PAYROLL</span>
-            </div>
+      <header className="header-content header">
+        <div className="logo-content">
+          <img src="../assets/images/logo.png" alt="" />
+          <div>
+            <span className="emp-text">EMPLOYEE</span><br />
+            <span className="emp-text emp-payroll">PAYROLL</span>
+          </div>
         </div>
-    </header>
+      </header>
 
-    <PayrollForm />
+      <PayrollForm />
 
-</body>
+    </div>
   );
 }
 
