@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import EmployeeService from '../../service/EmployeeService'
 
 import '../homePage/HomePage.css'
-import Display from './Display'
+import delBtn from'../assets/icons/delete-black-18dp.svg';
+import editBtn from '../assets/icons/create-black-18dp.svg';
+
 
 class HomePage extends Component {
 
@@ -11,7 +13,6 @@ class HomePage extends Component {
 
         this.state = {
             employees: [],
-            emp: '',
         }
     }
 
@@ -20,8 +21,6 @@ class HomePage extends Component {
             .then(res => {
                 console.log(res.data);
                 this.setState({ employees: res.data })
-                this.setState({ emp: res.data[0].name })
-                console.log(this.state.emp);
             })
     }
 
@@ -49,19 +48,34 @@ class HomePage extends Component {
                             <th>Actions</th>
                         </tr>
 
-                        {this.state.employees.map(employee => {
-                            console.log(employee);
-                            <td>{employee.name}</td>
-
+                        {this.state.employees.map((employee) => {
+                            return (<tr>
+                                <td>
+                                    <img src="../assets/profile-images/Ellipse -2.png" alt="" className="profile" />
+                                </td>
+                                <td>{employee.name}</td>
+                                <td>{employee.gender}</td>
+                                {/* {employee.department.map(dept => {
+                                <td>
+                                <div className="dept-label">{dept}</div>
+                            </td>
+                            })} */}
+                                <td>
+                                    <div className="dept-label">{employee.department}</div>
+                                </td>
+                                <td>{employee.salary}</td>
+                                <td>{employee.startDate}</td>
+                                <td className="action-content">
+                                <img src={delBtn} id="1" onClick="remove(this)" alt="delete" />
+                                <img src={editBtn} id="2" onClick="update(this)" alt="delete" />
+                                </td>
+                            </tr>)
                         })}
-
-                        <Display employeeArray={this.state.employees} />
-
                         <tr>
                             <td>
                                 <img src="../assets/profile-images/Ellipse -2.png" alt="" className="profile" />
                             </td>
-                            <td>{this.state.emp}</td>
+                            <td>Ajay Barath</td>
                             <td>Male</td>
                             <td>
                                 <div className="dept-label">HR</div>
@@ -70,8 +84,8 @@ class HomePage extends Component {
                             <td>3000000</td>
                             <td>1 Nov 2020</td>
                             <td className="action-content">
-                                <img src="../assets/icons/delete-black-18dp.svg" id="1" onClick="remove(this)" alt="delete" />
-                                <img src="../assets/icons/create-black-18dp.svg" id="2" onClick="update(this)" alt="delete" />
+                                <img src={delBtn} id="1" onClick="remove(this)" alt="delete" />
+                                <img src={editBtn} id="2" onClick="update(this)" alt="delete" />
                             </td>
                         </tr>
                     </table>
