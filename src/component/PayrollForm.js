@@ -1,12 +1,14 @@
 import React from 'react';
 import '../component/payrollForm.css'
 import img1 from '../assets/profile-images/Ellipse -3.png'
+import EmployeeService from '../service/EmployeeService';
+import axios from 'axios';
 
 
 class PayrollForm extends React.Component {
 
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
 
             name: '',
@@ -16,79 +18,139 @@ class PayrollForm extends React.Component {
             department: '',
             startDate: '',
             note: '',
+            date: '',
+            month: '',
+            year: '',
         }
+
+        this.formValue = {
+            name: '',
+            salary: '',
+            profieImage: '',
+            gender: '',
+            department: '',
+            startDate: '',
+            note: '',
+        }
+
+        this.baseUrl = 'http://localhost:3000/employee';
+
+
+        this.handleChange = this.handleChange.bind(this);
+        this.save = this.save.bind(this);
+    }
+
+
+    handleChange(event) {
+        this.setState({ [event.target.name]: event.target.value });
+        console.log(event.target.value);
+        this.setState ( { startDate: this.state.date + " " + this.state.month + " " + this.state.year });
+
+        console.log(this.state.startDate)
+    }
+
+    save(event) {
+        event.preventDefault();
+        console.log("save");
+
+        // if (await validData()) {
+        //     console.log('error', formValue);
+        //     return;
+        // }
+
+        this.setState ( { startDate: this.state.date + " " + this.state.month + " " + this.state.year });
+
+        let object = {
+            name: this.state.name,
+            salary: this.state.salary,
+            profieImage: this.state.profieImage,
+            gender: this.state.gender,
+            department: this.state.department,
+            startDate: this.state.startDate,
+            note: this.state.note,
+        }
+
+        console.log(object);
+
+        // axios.post(this.baseUrl, object)
+
+        EmployeeService.addEmployee(object).then(data => {
+            console.log("data added");
+        }).catch(err => {
+            console.log('err while adding');
+        })
     }
 
     render() {
         return (<>
 
             <div className="form-content">
-                <form action="" className="form" onsubmit="save(); return false">
+                <form action="" className="form" onSubmit={this.save}>
                     <div className="form-head">
                         Employee Payroll form
                     </div>
                     <div className="row-content">
-                        <label for="name" className="label text">Name</label>
-                        <input type="text" className="input" id="name" name="name" placeholder="Your name.." required />
-                        <error-output className="text-error" for="text"></error-output>
+                        <label  className="label text">Name</label>
+                        <input type="text" className="input" id="name" name="name" placeholder="Your name.." required value={this.state.name} onChange={this.handleChange} />
+                        <error-output className="text-error" ></error-output>
                     </div>
                     <div className="row-content">
-                        <label for="profile" className="label text">Profile image</label>
+                        <label  className="label text">Profile image</label>
                         <div className="profile-radio-content">
                             <label>
-                                <input type="radio" id="profile1" name="profile" required ></input>
+                                <input type="radio" id="profile1" name="profieImage" required onChange={this.handleChange}></input>
                                 <img src="../assets/profile-images/Ellipse -3.png" alt="" id="image1" className="profile" />
                             </label>
                             <label>
-                                <input type="radio" id="profile2" name="profile" value="../assets/profile-images/Ellipse 1.png" />
+                                <input type="radio" id="profile2" name="profieImage" value="../assets/profile-images/Ellipse 1.png" onChange={this.handleChange} />
                                 <img src="../assets/profile-images/Ellipse 1.png" alt="" id="image2" className="profile" />
                             </label>
                             <label>
-                                <input type="radio" id="profile3" name="profile"
-                                    value="../assets/profile-images/Ellipse -8.png" />
+                                <input type="radio" id="profile3" name="profieImage"
+                                    value="../assets/profile-images/Ellipse -8.png" onChange={this.handleChange} />
                                 <img src="../assets/profile-images/Ellipse -8.png" alt="" id="image3" className="profile" />
                             </label>
                             <label>
-                                <input type="radio" id="profile4" name="profile"
-                                    value="../assets/profile-images/Ellipse -7.png" />
+                                <input type="radio" id="profile4" name="profieImage"
+                                    value="../assets/profile-images/Ellipse -7.png" onChange={this.handleChange} />
                                 <img src="../assets/profile-images/Ellipse -7.png" alt="" id="image4" className="profile" />
                             </label>
                         </div>
                     </div>
                     <div className="row-content">
-                        <label for="gender" className="label text">Gender</label>
+                        <label className="label text">Gender</label>
                         <div>
-                            <input type="radio" id="male" name="gender" value="male" required />
-                            <label for="male" className="text">Male</label>
-                            <input type="radio" id="female" name="gender" value="female" />
-                            <label for="female" className="text">Female</label>
+                            <input type="radio" id="male" name="gender" value="male" required onChange={this.handleChange} />
+                            <label className="text">Male</label>
+                            <input type="radio" id="female" name="gender" value="female" onChange={this.handleChange} />
+                            <label  className="text">Female</label>
                         </div>
                     </div>
                     <div className="row-content">
-                        <label for="department" className="label text">Department</label>
+                        <label className="label text">Department</label>
                         <div className="department-checkbox-content">
-                            <input type="checkbox" id="hr" name="department" value="HR" className="group-required" />
-                            <label for="hr" className="text">HR</label>
-                            <input type="checkbox" className="checkbox" id="sales" name="department" value="Sales" />
-                            <label for="sales" className="text">Sales</label>
-                            <input type="checkbox" className="checkbox" id="finance" name="department" value="Finance" />
-                            <label for="finance" className="text">Finance</label>
-                            <input type="checkbox" className="checkbox" id="engineer" name="department" value="Engineer" />
-                            <label for="engineer" className="text">Engineer</label>
-                            <input type="checkbox" className="checkbox" id="others" name="department" value="Others" />
-                            <label for="others" className="text">Others</label>
+                            <input type="checkbox" id="hr" name="department" value="HR" className="group-required" onChange={this.handleChange} />
+                            <label   className="text">HR</label>
+                            <input type="checkbox" className="checkbox" id="sales" name="department" value="Sales" onChange={this.handleChange} />
+                            <label className="text">Sales</label>
+                            <input type="checkbox" className="checkbox" id="finance" name="department" value="Finance" onChange={this.handleChange} />
+                            <label className="text">Finance</label>
+                            <input type="checkbox" className="checkbox" id="engineer" name="department" value="Engineer" onChange={this.handleChange} />
+                            <label className="text">Engineer</label>
+                            <input type="checkbox" className="checkbox" id="others" name="department" value="Others" onChange={this.handleChange} />
+                            <label className="text">Others</label>
                         </div>
                     </div>
                     <div className="row-content">
-                        <label for="salary" className="label text">Choose your salary</label>
+                        <label   className="label text">Choose your salary</label>
                         <input type="range" className="input" name="salary" id="salary" min="300000" max="500000" step="100"
-                            value="400000" />
+                            value="400000" onChange={this.handleChange} />
                         <output className="salary-output text">400000</output>
                     </div>
                     <div className="row-content">
-                        <label for="startDate" className="label text">Start date</label>
+                        <label className="label text">Start date</label>
                         <div className="date-content">
-                            <select name="Day" id="day">
+                            <select name="date" id="day" onChange={this.handleChange}>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -121,7 +183,7 @@ class PayrollForm extends React.Component {
                                 <option value="30">30</option>
                                 <option value="31">31</option>
                             </select>
-                            <select name="Month" id="month">
+                            <select name="month" id="month" onChange={this.handleChange}>
                                 <option value="January">January</option>
                                 <option value="Feburary">Feburary</option>
                                 <option value="March">March</option>
@@ -135,7 +197,7 @@ class PayrollForm extends React.Component {
                                 <option value="November">November</option>
                                 <option value="December">December</option>
                             </select>
-                            <select name="Year" id="year">
+                            <select name="year" id="year" onChange={this.handleChange}>
                                 <option value="2021">2021</option>
                                 <option value="2020">2020</option>
                                 <option value="2019">2019</option>
@@ -144,18 +206,18 @@ class PayrollForm extends React.Component {
                                 <option value="2018">2018</option>
                             </select>
                         </div>
-                        <error-output className="date-error" for="text"></error-output>
+                        <error-output className="date-error" ></error-output>
                     </div>
                     <div className="row-content">
-                        <label for="notes" className="label text">Notes</label>
-                        <textarea name="Notes" id="notes" className="notes" placeholder="" style={{height: 100}}></textarea>
+                        <label className="label text">Notes</label>
+                        <textarea name="notes" id="note" className="notes" placeholder="" style={{ height: 100 }} onChange={this.handleChange}></textarea>
                     </div>
                     <div className="buttonParent">
                         <a href="../html/AppHomePage.html" className="resetButton button cancelButton"> Cancel</a>
                         <div className="submit-reset">
-                            <button className="button submitButton" id="submitButton" onclick="save(this); return false"
+                            <button className="button submitButton" id="submitButton"
                                 type="submit">Submit</button>
-                            <button className="button resetButton" type="reset" onclick="resetForm(); return false">Reset</button>
+                            <button className="button resetButton" type="reset" >Reset</button>
                         </div>
                     </div>
                 </form>
