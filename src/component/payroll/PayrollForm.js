@@ -1,8 +1,12 @@
 import React from 'react';
-import '../component/payrollForm.css'
-import img1 from '../assets/profile-images/Ellipse -3.png'
-import EmployeeService from '../service/EmployeeService';
+import '../payroll/payrollForm.css'
+import EmployeeService from '../../service/EmployeeService';
 import axios from 'axios';
+import pimg1 from '../assets/profile-images/Ellipse -3.png';
+import pimg2 from '../assets/profile-images/Ellipse 1.png';
+import pimg3 from '../assets/profile-images/Ellipse -8.png';
+import pimg4 from '../assets/profile-images/Ellipse -7.png';
+
 
 
 class PayrollForm extends React.Component {
@@ -15,22 +19,18 @@ class PayrollForm extends React.Component {
             salary: '',
             profieImage: '',
             gender: '',
-            department: '',
+            department: [],
             startDate: '',
             note: '',
-            date: '',
-            month: '',
-            year: '',
-        }
-
-        this.formValue = {
-            name: '',
-            salary: '',
-            profieImage: '',
-            gender: '',
-            department: '',
-            startDate: '',
-            note: '',
+            date: '1',
+            month: 'January',
+            year: '2021',
+            hr: 'false',
+            sales: 'false',
+            finance: 'false',
+            engineering: 'false',
+            others: 'false',
+            nameError: '',
         }
 
         this.baseUrl = 'http://localhost:3000/employee';
@@ -38,32 +38,76 @@ class PayrollForm extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.save = this.save.bind(this);
+        this.onChecked = this.onChecked.bind(this);
+        this.onSalaryChange = this.onSalaryChange.bind(this);
+        this.onReset = this.onReset.bind(this);
+
     }
 
+    onReset() {
+        this.setState({
+            name: '',
+            salary: '',
+            profieImage: '',
+            gender: '',
+            department: [],
+            startDate: '',
+            note: '',
+            date: '1',
+            month: 'January',
+            year: '2021',
+            hr: 'false',
+            sales: 'false',
+            finance: 'false',
+            engineering: 'false',
+            others: 'false',
+            nameError: '',
+        })
+    }
+
+    onChecked(event) {
+        this.setState({ [event.target.name]: event.target.value })
+    }
 
     handleChange(event) {
+
+        if (event.target.name === 'name') {
+            let name = RegExp('^[A-Z]{1}[a-z]{3,}$')
+            if (name.test(event.target.value))
+                this.setState({ nameError: "" })
+            else this.setState({ nameError: "Invalid name" })
+        }
+
         this.setState({ [event.target.name]: event.target.value });
         console.log(event.target.value);
-        this.setState ( { startDate: this.state.date + " " + this.state.month + " " + this.state.year });
+        this.setState({ startDate: this.state.date + " " + this.state.month + " " + this.state.year });
 
         console.log(this.state.startDate)
+    }
+
+    onSalaryChange(event) {
+        this.setState({ salary: event.target.value });
+        console.log(event.target.value)
     }
 
     save(event) {
         event.preventDefault();
         console.log("save");
 
-        // if (await validData()) {
-        //     console.log('error', formValue);
-        //     return;
-        // }
+        if (this.state.nameError === '') {
 
-        this.setState ( { startDate: this.state.date + " " + this.state.month + " " + this.state.year });
+        }
+        else {
+            alert('Invalid name')
+            return;
+        }
+
+        this.setState({ startDate: this.state.date + " " + this.state.month + " " + this.state.year });
 
         let object = {
             name: this.state.name,
             salary: this.state.salary,
-            profieImage: this.state.profieImage,
+            profileImage: this.state.profieImage,
             gender: this.state.gender,
             department: this.state.department,
             startDate: this.state.startDate,
@@ -75,6 +119,8 @@ class PayrollForm extends React.Component {
         // axios.post(this.baseUrl, object)
 
         EmployeeService.addEmployee(object).then(data => {
+            alert(object)
+            alert(" data added successfully")
             console.log("data added");
         }).catch(err => {
             console.log('err while adding');
@@ -90,30 +136,30 @@ class PayrollForm extends React.Component {
                         Employee Payroll form
                     </div>
                     <div className="row-content">
-                        <label  className="label text">Name</label>
+                        <label className="label text">Name</label>
                         <input type="text" className="input" id="name" name="name" placeholder="Your name.." required value={this.state.name} onChange={this.handleChange} />
-                        <error-output className="text-error" ></error-output>
+                        <error-output className="text-error" >{this.state.nameError}</error-output>
                     </div>
                     <div className="row-content">
-                        <label  className="label text">Profile image</label>
+                        <label className="label text">Profile image</label>
                         <div className="profile-radio-content">
                             <label>
                                 <input type="radio" id="profile1" name="profieImage" required onChange={this.handleChange}></input>
-                                <img src="../assets/profile-images/Ellipse -3.png" alt="" id="image1" className="profile" />
+                                <img src={pimg1} alt="" id="image1" className="profile" />
                             </label>
                             <label>
                                 <input type="radio" id="profile2" name="profieImage" value="../assets/profile-images/Ellipse 1.png" onChange={this.handleChange} />
-                                <img src="../assets/profile-images/Ellipse 1.png" alt="" id="image2" className="profile" />
+                                <img src={pimg2} alt="" id="image2" className="profile" />
                             </label>
                             <label>
                                 <input type="radio" id="profile3" name="profieImage"
                                     value="../assets/profile-images/Ellipse -8.png" onChange={this.handleChange} />
-                                <img src="../assets/profile-images/Ellipse -8.png" alt="" id="image3" className="profile" />
+                                <img src={pimg3} alt="" id="image3" className="profile" />
                             </label>
                             <label>
                                 <input type="radio" id="profile4" name="profieImage"
                                     value="../assets/profile-images/Ellipse -7.png" onChange={this.handleChange} />
-                                <img src="../assets/profile-images/Ellipse -7.png" alt="" id="image4" className="profile" />
+                                <img src={pimg4} alt="" id="image4" className="profile" />
                             </label>
                         </div>
                     </div>
@@ -123,14 +169,14 @@ class PayrollForm extends React.Component {
                             <input type="radio" id="male" name="gender" value="male" required onChange={this.handleChange} />
                             <label className="text">Male</label>
                             <input type="radio" id="female" name="gender" value="female" onChange={this.handleChange} />
-                            <label  className="text">Female</label>
+                            <label className="text">Female</label>
                         </div>
                     </div>
                     <div className="row-content">
                         <label className="label text">Department</label>
                         <div className="department-checkbox-content">
                             <input type="checkbox" id="hr" name="department" value="HR" className="group-required" onChange={this.handleChange} />
-                            <label   className="text">HR</label>
+                            <label className="text">HR</label>
                             <input type="checkbox" className="checkbox" id="sales" name="department" value="Sales" onChange={this.handleChange} />
                             <label className="text">Sales</label>
                             <input type="checkbox" className="checkbox" id="finance" name="department" value="Finance" onChange={this.handleChange} />
@@ -142,10 +188,10 @@ class PayrollForm extends React.Component {
                         </div>
                     </div>
                     <div className="row-content">
-                        <label   className="label text">Choose your salary</label>
+                        <label className="label text">Choose your salary</label>
                         <input type="range" className="input" name="salary" id="salary" min="300000" max="500000" step="100"
-                            value="400000" onChange={this.handleChange} />
-                        <output className="salary-output text">400000</output>
+                            value={this.state.salary} onChange={this.onSalaryChange} />
+                        <output className="salary-output text">{this.state.salary}</output>
                     </div>
                     <div className="row-content">
                         <label className="label text">Start date</label>
@@ -213,11 +259,11 @@ class PayrollForm extends React.Component {
                         <textarea name="notes" id="note" className="notes" placeholder="" style={{ height: 100 }} onChange={this.handleChange}></textarea>
                     </div>
                     <div className="buttonParent">
-                        <a href="../html/AppHomePage.html" className="resetButton button cancelButton"> Cancel</a>
+                        <a href="/" className="resetButton button cancelButton"> Cancel</a>
                         <div className="submit-reset">
                             <button className="button submitButton" id="submitButton"
                                 type="submit">Submit</button>
-                            <button className="button resetButton" type="reset" >Reset</button>
+                            <button className="button resetButton" type="reset" onClick={this.onReset} >Reset</button>
                         </div>
                     </div>
                 </form>
