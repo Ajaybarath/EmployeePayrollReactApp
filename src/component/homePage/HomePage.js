@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import EmployeeService from '../../service/EmployeeService'
 
 import '../homePage/HomePage.css'
-import delBtn from'../assets/icons/delete-black-18dp.svg';
+import delBtn from '../assets/icons/delete-black-18dp.svg';
 import editBtn from '../assets/icons/create-black-18dp.svg';
 
 
@@ -38,56 +38,41 @@ class HomePage extends Component {
 
                     <table className="table-main" id="display">
 
-                        <tr>
-                            <th></th>
-                            <th>Name</th>
-                            <th>Gender</th>
-                            <th>Department</th>
-                            <th>Salary</th>
-                            <th>Start Date</th>
-                            <th>Actions</th>
-                        </tr>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Name</th>
+                                <th>Gender</th>
+                                <th>Department</th>
+                                <th>Salary</th>
+                                <th>Start Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.state.employees.map((employee) => {
+                                return (<tr key={employee.id}>
+                                    <td>
+                                        <img src={employee.profileUrl} alt="" className="profile" />
+                                    </td>
+                                    <td>{employee.name}</td>
+                                    <td>{employee.gender}</td>
+                                    <td>
 
-                        {this.state.employees.map((employee) => {
-                            return (<tr>
-                                <td>
-                                    <img src="../assets/profile-images/Ellipse -2.png" alt="" className="profile" />
-                                </td>
-                                <td>{employee.name}</td>
-                                <td>{employee.gender}</td>
-                                {/* {employee.department.map(dept => {
-                                <td>
-                                <div className="dept-label">{dept}</div>
-                            </td>
-                            })} */}
-                                <td>
-                                    <div className="dept-label">{employee.department}</div>
-                                </td>
-                                <td>{employee.salary}</td>
-                                <td>{employee.startDate}</td>
-                                <td className="action-content">
-                                <img src={delBtn} id="1" onClick="remove(this)" alt="delete" />
-                                <img src={editBtn} id="2" onClick="update(this)" alt="delete" />
-                                </td>
-                            </tr>)
-                        })}
-                        <tr>
-                            <td>
-                                <img src="../assets/profile-images/Ellipse -2.png" alt="" className="profile" />
-                            </td>
-                            <td>Ajay Barath</td>
-                            <td>Male</td>
-                            <td>
-                                <div className="dept-label">HR</div>
-                                <div className="dept-label">Finance</div>
-                            </td>
-                            <td>3000000</td>
-                            <td>1 Nov 2020</td>
-                            <td className="action-content">
-                                <img src={delBtn} id="1" onClick="remove(this)" alt="delete" />
-                                <img src={editBtn} id="2" onClick="update(this)" alt="delete" />
-                            </td>
-                        </tr>
+                                        {employee.department.map(dept => {
+
+                                            return <div className="dept-label" key={dept}>{dept}</div>
+                                        })}
+                                    </td>
+                                    <td>{employee.salary}</td>
+                                    <td>{employee.startDate}</td>
+                                    <td className="action-content">
+                                        <img src={delBtn} id="1" onClick="remove(this)" alt="delete" />
+                                        <img src={editBtn} id="2" onClick="update(this)" alt="delete" />
+                                    </td>
+                                </tr>)
+                            })}
+                        </tbody>
                     </table>
                 </div>
             </div>
