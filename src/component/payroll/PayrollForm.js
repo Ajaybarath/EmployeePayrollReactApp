@@ -6,6 +6,7 @@ import pimg1 from '../assets/profile-images/Ellipse -3.png';
 import pimg2 from '../assets/profile-images/Ellipse 1.png';
 import pimg3 from '../assets/profile-images/Ellipse -8.png';
 import pimg4 from '../assets/profile-images/Ellipse -7.png';
+// import { useParams } from 'react-router-dom';
 
 
 
@@ -33,14 +34,27 @@ class PayrollForm extends React.Component {
             nameError: '',
         }
 
+
+
         this.baseUrl = 'http://localhost:3000/employee';
 
 
         this.handleChange = this.handleChange.bind(this);
         this.save = this.save.bind(this);
-        this.onChecked = this.onChecked.bind(this);
+        // this.onChecked = this.onChecked.bind(this);
         this.onSalaryChange = this.onSalaryChange.bind(this);
         this.onReset = this.onReset.bind(this);
+
+    }
+
+
+
+
+    componentDidMount() {
+        // const queryParams = new URLSearchParams(window.location.search);
+        // const id = queryParams.get('id');
+        // console.log(this.props)
+        // console.log(this.props.employee)
 
     }
 
@@ -50,7 +64,8 @@ class PayrollForm extends React.Component {
             salary: '',
             profieImage: '',
             gender: '',
-            department: [],
+            department: new Map(),
+            dept: new Map(),
             startDate: '',
             note: '',
             date: '1',
@@ -65,10 +80,6 @@ class PayrollForm extends React.Component {
         })
     }
 
-    onChecked(event) {
-        this.setState({ [event.target.name]: event.target.value })
-    }
-
     handleChange(event) {
 
         if (event.target.name === 'name') {
@@ -78,11 +89,35 @@ class PayrollForm extends React.Component {
             else this.setState({ nameError: "Invalid name" })
         }
 
-        this.setState({ [event.target.name]: event.target.value });
-        console.log(event.target.value);
-        this.setState({ startDate: this.state.date + " " + this.state.month + " " + this.state.year });
+        if (event.target.name === 'department') {
+            var isChecked = event.target.checked;
+            var item = event.target.value;
 
-        console.log(this.state.startDate)
+            console.log(isChecked);
+            if (isChecked == true) {
+                var upDept = this.state.department;
+                upDept.push(event.target.value)
+                console.log(upDept)
+                this.setState({ dept: upDept })
+            }
+            else {
+                var upDept = this.state.dept;
+                upDept = upDept.filter(item => item !== event.target.value)
+                console.log(upDept)
+                this.setState({ dept: upDept })
+            }
+
+            // this.setState(prevState => ({ department: prevState.department.set(item, isChecked) }));
+        }
+        else {
+            this.setState({ [event.target.name]: event.target.value });
+            console.log(event.target.value);
+            this.setState({ startDate: this.state.date + " " + this.state.month + " " + this.state.year });
+
+            console.log(this.state.startDate)
+        }
+
+
     }
 
     onSalaryChange(event) {
@@ -107,9 +142,9 @@ class PayrollForm extends React.Component {
         let object = {
             name: this.state.name,
             salary: this.state.salary,
-            profileImage: this.state.profieImage,
+            profilePic: this.state.profieImage,
             gender: this.state.gender,
-            department: this.state.department,
+            department: this.state.dept,
             startDate: this.state.startDate,
             note: this.state.note,
         }
@@ -128,8 +163,11 @@ class PayrollForm extends React.Component {
     }
 
     render() {
+
+
         return (<>
 
+            {console.log(this.props) }
             <div className="form-content">
                 <form action="" className="form" onSubmit={this.save}>
                     <div className="form-head">
@@ -230,8 +268,8 @@ class PayrollForm extends React.Component {
                                 <option value="31">31</option>
                             </select>
                             <select name="month" id="month" onChange={this.handleChange}>
-                                <option value="January">January</option>
-                                <option value="Feburary">Feburary</option>
+                                <option value="Jan">January</option>
+                                <option value="Feb">Feburary</option>
                                 <option value="March">March</option>
                                 <option value="April">April</option>
                                 <option value="May">May</option>
@@ -240,7 +278,7 @@ class PayrollForm extends React.Component {
                                 <option value="August">August</option>
                                 <option value="September">September</option>
                                 <option value="October">October</option>
-                                <option value="November">November</option>
+                                <option value="Nov">November</option>
                                 <option value="December">December</option>
                             </select>
                             <select name="year" id="year" onChange={this.handleChange}>
@@ -256,7 +294,7 @@ class PayrollForm extends React.Component {
                     </div>
                     <div className="row-content">
                         <label className="label text">Notes</label>
-                        <textarea name="notes" id="note" className="notes" placeholder="" style={{ height: 100 }} onChange={this.handleChange}></textarea>
+                        <textarea name="note" id="note" className="notes" placeholder="" style={{ height: 100 }} onChange={this.handleChange}></textarea>
                     </div>
                     <div className="buttonParent">
                         <a href="/" className="resetButton button cancelButton"> Cancel</a>
