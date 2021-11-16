@@ -19,6 +19,7 @@ function App() {
 
       <Routes>
         <Route path="/form" element={<PayrollForm />} />
+        <Route path="/form/:id" element={<PayrollForm />} />
         <Route path="/" element={<HomePage />} />
       </Routes>
 
