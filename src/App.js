@@ -1,6 +1,6 @@
 import PayrollForm from './component/payroll/PayrollForm';
 import './component/payroll/payrollForm.css';
-import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import HomePage from './component/homePage/HomePage'
 
 function App() {
