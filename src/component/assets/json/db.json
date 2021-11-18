@@ -40,7 +40,8 @@
       "name": "test",
       "gender": "male",
       "departMent": [
-        "HR"
+        "HR",
+        "FINANCE"
       ],
       "salary": "30000",
       "startDate": "1 Jan 2020",
